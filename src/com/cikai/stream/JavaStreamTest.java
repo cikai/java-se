@@ -1,6 +1,7 @@
 package com.cikai.stream;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -33,6 +34,19 @@ public class JavaStreamTest {
         for (int i : evens) {
             System.out.print(i + " ");
         }
+        System.out.println("");
+
+        // 等差数列
+        Stream.iterate(0, n -> n + 3).limit(10).forEach(x -> System.out.print(x + " "));
+        System.out.println("");
+
+        // 平方数 2^2, 3^2, 4^2
+        List<Integer> numList = Arrays.asList(1, 2, 3, 4);
+        List<Integer> squareNums = numList.stream().map(n -> n * n).collect(Collectors.toList());
+        for (int i : squareNums) {
+            System.out.print(i + " ");
+        }
+        System.out.println("");
 
     }
 
