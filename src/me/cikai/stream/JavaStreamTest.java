@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -21,8 +22,8 @@ public class JavaStreamTest {
         arrayList.add("ddd");
 
         Stream<String> stream = arrayList.stream();
-        List<String> list = stream.collect(Collectors.toList());
-        System.out.println(list.toString());
+        List<String> list1 = stream.collect(Collectors.toList());
+        System.out.println(list1.toString());
 
         // 转换大写
         List<String> upperCase = arrayList.stream().map(String::toUpperCase).collect(Collectors.toList());
@@ -47,6 +48,13 @@ public class JavaStreamTest {
             System.out.print(i + " ");
         }
         System.out.println("");
+
+        // 控制台输出0-9
+        IntStream.range(0, 10).forEach(value -> System.out.print(value));
+
+        // 计算列表中的元素数
+        List<Integer> list2 = IntStream.range(1, 100).boxed().collect(Collectors.toList());
+        System.out.println(list2.stream().count());
 
     }
 
