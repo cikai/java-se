@@ -1,16 +1,15 @@
 package me.cikai.thread;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 // http://www.cnblogs.com/firstsheng618/p/3865924.html
 
-public class LinkedBqThreadPool extends ThreadPoolExecutor {
+public class ArrayBqThreadPool extends ThreadPoolExecutor {
   /**
-   * 正在执行任务数量
+   * 待执行任务数量
    */
   private AtomicInteger taskNum = new AtomicInteger(0);
 
@@ -22,53 +21,20 @@ public class LinkedBqThreadPool extends ThreadPoolExecutor {
    * @param maximumPoolSize
    *          池中允许的最大线程数
    * @param keepActiveTime
-   *          非核心线程空闲等待新任务的最长时间
-   * @param timeunit
-   *          keepActiveTime参数的时间单位
-   * @param blockingqueue
-   *          任务队列
-   */
-  public LinkedBqThreadPool(int corePoolSize, int maximumPoolSize, long keepActiveTime, TimeUnit timeunit,
-      BlockingQueue<Runnable> blockingqueue) {
-    super(corePoolSize, maximumPoolSize, keepActiveTime, timeunit, blockingqueue);
-  }
-
-  /**
-   * 构建线程池
-   * 
-   * @param corePoolSize
-   *          池中所保存的核心线程数
-   * @param maximumPoolSize
-   *          池中允许的最大线程数
-   * @param keepActiveTime
    *          非核心线程空闲等待新任务的最长时间(单位：秒)
-   * @param blockingqueue
-   *          任务队列
+   * @param queueCapacity
+   *          队列容量，即等待执行任务数
    */
-  public LinkedBqThreadPool(int corePoolSize, int maximumPoolSize, long keepActiveTime,
-      BlockingQueue<Runnable> blockingqueue) {
-    this(corePoolSize, maximumPoolSize, keepActiveTime, TimeUnit.SECONDS, blockingqueue);
-  }
-
-  /**
-   * 构建线程池
-   * 
-   * @param corePoolSize
-   *          池中所保存的核心线程数
-   * @param maximumPoolSize
-   *          池中允许的最大线程数
-   * @param keepActiveTime
-   *          非核心线程空闲等待新任务的最长时间(单位：秒)
-   */
-  public LinkedBqThreadPool(int corePoolSize, int maximumPoolSize, long keepActiveTime) {
-    this(corePoolSize, maximumPoolSize, keepActiveTime, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+  public ArrayBqThreadPool(int corePoolSize, int maximumPoolSize, long keepActiveTime, int queueCapacity) {
+    super(corePoolSize, maximumPoolSize, keepActiveTime, TimeUnit.SECONDS,
+        new ArrayBlockingQueue<Runnable>(queueCapacity));
   }
 
   /**
    * 构建单线程的线程池
    */
-  public LinkedBqThreadPool() {
-    this(1, 1, 1, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+  public ArrayBqThreadPool(int queueCapacity) {
+    this(1, 1, 1, queueCapacity);
   }
 
   /**
@@ -107,7 +73,7 @@ public class LinkedBqThreadPool extends ThreadPoolExecutor {
   }
 
   /**
-   * @return 未执行的任务数
+   * @return 待执行的任务数
    */
   public int getTaskNum() {
     return taskNum.get();
